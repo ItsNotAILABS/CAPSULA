@@ -1,0 +1,33 @@
+{
+  "private": true,
+  "name": "monorepo",
+  "version": "1.0.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "lerna run build",
+    "lint": "lerna run lint",
+    "watch": "lerna run watch --stream --parallel",
+    "typecheck": "lerna run typecheck",
+    "postinstall": "patch-package",
+    "release": "node scripts/release.mjs",
+    "release:metadata": "node scripts/release-metadata.mjs"
+  },
+  "dependencies": {
+    "@tsconfig/node12": "1.0.7"
+  },
+  "devDependencies": {
+    "lerna": "^7.3.0",
+    "patch-package": "^8.0.0",
+    "postinstall-postinstall": "^2.1.0"
+  },
+  "resolutions": {
+    "typescript": "~6.0.3"
+  },
+  "packageManager": "yarn@1.22.22",
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

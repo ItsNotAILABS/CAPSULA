@@ -1,0 +1,16 @@
+{
+  "name": "react-native-electron-modules",
+  "version": "1.0.0",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "yarn build --watch --preserveWatchOutput",
+    "lint": "eslint .",
+    "typecheck": "tsc"
+  },
+  "devDependencies": {
+    "electron": "28.2.0",
+    "eslint-config-universe": "^15.0.3",
+    "typescript": "~6.0.3"
+  }
+}

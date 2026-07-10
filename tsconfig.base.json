@@ -1,0 +1,14 @@
+{
+  "extends": "@tsconfig/node12/tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "composite": true,
+    "inlineSources": true,
+    "moduleResolution": "node",
+    "ignoreDeprecations": "6.0",
+    "noImplicitReturns": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "typeRoots": ["./ts-declarations", "./node_modules/@types", "../../node_modules/@types", "../../ts-declarations"]
+  }
+}

@@ -1,0 +1,140 @@
+name: Build
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - expo-orbit-v*
+
+permissions:
+  contents: write
+
+jobs:
+  build_on_linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 👀 Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      # rpm's post-install brp-strip chokes on Electron's prebuilt binaries,
+      # failing maker-rpm's %install step. Electron binaries shouldn't be
+      # stripped anyway, so disable the post-install scriptlet globally.
+      - name: 🩹 Disable rpm binary stripping
+        run: echo '%__os_install_post %{nil}' >> ~/.rpmmacros
+      - name: ⬢ Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: 🧶 Install workspace node modules
+        run: yarn install --frozen-lockfile
+      - name: 📦️ Build packages
+        run: yarn build
+      - name: 🧶 Install electron node modules
+        run: yarn install --frozen-lockfile
+        working-directory: apps/menu-bar/electron
+      - name: 📦️ Build electron app
+        run: yarn make
+        working-directory: apps/menu-bar/electron
+      - name: 📤 Upload DEB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-deb
+          path: apps/menu-bar/electron/out/make/deb/x64/*.deb
+      - name: 📤 Upload RPM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-rpm
+          path: apps/menu-bar/electron/out/make/rpm/x64/*.rpm
+
+  build_on_win:
+    runs-on: windows-latest
+    steps:
+      - name: 👀 Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: ⬢ Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: 🧶 Install workspace node modules
+        run: yarn install --frozen-lockfile
+      - name: 📦️ Build packages
+        run: yarn build
+      - name: 🧶 Install electron node modules
+        run: yarn install --frozen-lockfile
+        working-directory: apps/menu-bar/electron
+      - name: 📦️ Build electron app
+        run: yarn make
+        working-directory: apps/menu-bar/electron
+      - name: 📤 Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-exe
+          path: |
+            apps/menu-bar/electron/out/make/squirrel.windows/x64/*Setup.exe
+            apps/menu-bar/electron/out/make/squirrel.windows/x64/*.nupkg
+            apps/menu-bar/electron/out/make/squirrel.windows/x64/RELEASES
+
+  build_on_macos:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 👀 Checkout
+        uses: actions/checkout@v4
+      - name: ⬢ Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: 🧶 Install workspace node modules
+        run: yarn install --frozen-lockfile
+      - name: 📦️ Build packages
+        run: yarn build
+      - name: 📦 Install EAS CLI
+        run: npm install -g eas-cli
+      - name: 🍎 Build and notarize macOS app
+        run: eas build --platform ios --profile production --non-interactive
+        working-directory: apps/menu-bar
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+
+  create_release:
+    if: startsWith(github.ref, 'refs/tags/expo-orbit-v')
+    needs: [build_on_linux, build_on_win]
+    runs-on: ubuntu-latest
+    steps:
+      - name: 👀 Checkout
+        uses: actions/checkout@v4
+
+      - name: 📥 Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: 📝 Extract release notes from CHANGELOG
+        id: notes
+        run: |
+          VERSION="${GITHUB_REF#refs/tags/expo-orbit-v}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+          # Extract the section for this version from CHANGELOG.md
+          NOTES=$(awk "/^## ${VERSION} /{found=1; next} /^## [0-9]/{if(found) exit} found{print}" CHANGELOG.md)
+
+          # Write to file for gh release
+          echo "$NOTES" > release-notes.md
+
+      - name: 🚀 Create draft GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${{ steps.notes.outputs.version }}"
+          TAG="expo-orbit-v${VERSION}"
+
+          gh release create "$TAG" \
+            --draft \
+            --title "v${VERSION}" \
+            --notes-file release-notes.md
+
+          # Upload artifacts individually to handle filenames with spaces
+          find artifacts -type f \( -name "*.deb" -o -name "*.rpm" -o -name "*Setup.exe" -o -name "*.nupkg" -o -name "RELEASES" \) -print0 \
+            | xargs -0 -I {} gh release upload "$TAG" "{}"

@@ -1,0 +1,27 @@
+{
+  "cli": {
+    "version": ">= 3.18.3",
+    "promptToConfigurePushNotifications": false
+  },
+  "build": {
+    "preview": {
+      "config": "build-preview.yml",
+      "credentialsSource": "remote",
+      "ios": {
+        "image": "macos-tahoe-26.4-xcode-26.4",
+        "applicationArchivePath": "build/Release/*.app"
+      }
+    },
+    "production": {
+      "config": "build-release.yml",
+      "credentialsSource": "remote",
+      "ios": {
+        "image": "macos-tahoe-26.4-xcode-26.4",
+        "applicationArchivePath": "build/Release/*.zip"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

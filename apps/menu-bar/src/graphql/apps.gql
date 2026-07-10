@@ -1,0 +1,34 @@
+fragment AppForPinnedList on App {
+  id
+  name
+  slug
+  latestActivity
+  icon {
+    url
+    primaryColor
+  }
+  profileImageUrl
+  ownerAccount {
+    name
+  }
+}
+
+query GetAppsForPinnedList {
+  meUserActor {
+    id
+    pinnedApps {
+      ...AppForPinnedList
+    }
+    accounts {
+      id
+      appsPaginated(first: 10, filter: { sortByField: LATEST_ACTIVITY_TIME }) {
+        edges {
+          cursor
+          node {
+            ...AppForPinnedList
+          }
+        }
+      }
+    }
+  }
+}

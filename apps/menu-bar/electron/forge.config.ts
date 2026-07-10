@@ -1,0 +1,127 @@
+import { MakerDeb } from '@electron-forge/maker-deb';
+import { MakerDebConfigOptions } from '@electron-forge/maker-deb/dist/Config';
+import { MakerRpm } from '@electron-forge/maker-rpm';
+import { MakerRpmConfigOptions } from '@electron-forge/maker-rpm/dist/Config';
+import { MakerSquirrel } from '@electron-forge/maker-squirrel';
+import { MakerZIP } from '@electron-forge/maker-zip';
+import { VitePlugin } from '@electron-forge/plugin-vite';
+import type { ForgeConfig } from '@electron-forge/shared-types';
+import { spawn } from 'child_process';
+import path from 'path';
+
+type CommonParams<T, U> = {
+  [K in keyof T & keyof U]?: T[K] extends U[K] ? T[K] : never;
+};
+
+type LinuxOptions = CommonParams<MakerDebConfigOptions, MakerRpmConfigOptions>;
+
+const linuxOptions: LinuxOptions = {
+  mimeType: ['x-scheme-handler/expo-orbit'],
+  icon: `./assets/images/icon-linux.png`,
+  categories: ['Utility'],
+  productName: 'Expo Orbit',
+  genericName: 'orbit',
+  homepage: 'https://github.com/expo/orbit',
+};
+
+const config: ForgeConfig = {
+  packagerConfig: {
+    icon: './assets/images/icon-windows',
+    executableName: 'expo-orbit',
+    name: 'Expo Orbit',
+    extraResource: './assets',
+    // `wdio-electron-service` has to live in `dependencies` (not devDeps) so
+    // electron-packager keeps it in the asar's node_modules — the runtime
+    // require in src/main.ts needs it. But it's a test-only dep; strip it
+    // from production builds where WDIO_E2E isn't set.
+    ignore:
+      process.env.WDIO_E2E === '1' ? undefined : [/^\/node_modules\/wdio-electron-service(\/|$)/],
+  },
+  rebuildConfig: {},
+  hooks: {
+    generateAssets: async () => {
+      // Run for both `electron-forge make` and `electron-forge package`. Skipping
+      // it for `package` used to bundle a stale `electron/dist/` web export into
+      // the .app, which broke E2E tests whenever the renderer changed.
+      const isMakeOrPackage = process.argv.some(
+        (a) => a.includes('electron-forge-make.js') || a.includes('electron-forge-package.js')
+      );
+      if (!isMakeOrPackage) {
+        return;
+      }
+      console.log('Running custom pre-make command: yarn export-web');
+
+      const parentDir = path.resolve(__dirname, '..'); // Get the parent directory
+      return new Promise((resolve, reject) => {
+        const command =
+          process.platform === 'win32' && process.env.GITHUB_ACTIONS ? 'yarn.cmd' : 'yarn';
+        const child = spawn(command, ['export-web'], {
+          shell: process.platform === 'win32' ? true : undefined,
+          stdio: 'inherit',
+          cwd: parentDir, // Set the working directory to the parent directory
+        });
+
+        child.on('close', (code) => {
+          if (code === 0) {
+            resolve();
+          } else {
+            reject(new Error(`preMake hook failed with exit code ${code}`));
+          }
+        });
+      });
+    },
+  },
+  makers: [
+    new MakerSquirrel({
+      name: 'ExpoOrbit',
+      authors: 'Expo',
+      description:
+        'Accelerate your development workflow with one-click build launches and simulator management from your menu bar',
+      iconUrl:
+        'https://raw.githubusercontent.com/expo/orbit/main/apps/menu-bar/electron/assets/images/icon-windows.ico',
+    }),
+    new MakerZIP({}, ['darwin']),
+    new MakerRpm({
+      options: {
+        ...linuxOptions,
+        license: 'MIT',
+      },
+    }),
+    new MakerDeb({
+      options: {
+        ...linuxOptions,
+        maintainer: 'Expo',
+      },
+    }),
+  ],
+  plugins: [
+    new VitePlugin({
+      // `build` can specify multiple entry builds, which can be Main process, Preload scripts, Worker process, etc.
+      // If you are familiar with Vite configuration, it will look really familiar.
+      build: [
+        {
+          // `entry` is just an alias for `build.lib.entry` in the corresponding file of `config`.
+          entry: './src/main.ts',
+          config: 'vite.main.config.mts',
+        },
+        {
+          entry: './src/preload.ts',
+          config: 'vite.preload.config.ts',
+        },
+        {
+          // compile CLI and inject it into the electron internal files
+          entry: '../../cli/src/index.ts',
+          config: 'vite.cli.config.ts',
+        },
+      ],
+      renderer: [
+        {
+          name: 'main_window',
+          config: 'vite.renderer.config.ts',
+        },
+      ],
+    }),
+  ],
+};
+
+export default config;

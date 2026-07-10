@@ -1,0 +1,99 @@
+name: Lint, TSC and Changelog checker
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/lint-and-tsc.yml
+      - apps/**
+      - packages/**
+      - ts-declarations/**
+  pull_request:
+    # The specific activity types are listed here to include "labeled" and "unlabeled"
+    # (which are not included by default for the "pull_request" trigger).
+    # This is needed to allow skipping enforcement of the changelog in PRs with specific labels,
+    # as defined in the (optional) "skipLabels" property.
+    types: [opened, synchronize, reopened, ready_for_review, labeled, unlabeled]
+    paths:
+      - .github/workflows/lint-and-tsc.yml
+      - apps/**
+      - packages/**
+      - ts-declarations/**
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: 👀 Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: ⬢ Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: 🧶 Install workspace node modules
+        run: yarn install --frozen-lockfile
+
+      - name: 🧶 Install electron node modules
+        run: yarn install --frozen-lockfile
+        working-directory: apps/menu-bar/electron
+
+      - name: 🚨 Lint "common-types" package files
+        run: yarn lint --max-warnings 0
+        working-directory: packages/common-types
+      - name: 📦️ Build "common-types" package
+        run: yarn build
+        working-directory: packages/common-types
+
+      - name: 🚨 Lint "eas-shared" package files
+        run: yarn lint --max-warnings 0
+        working-directory: packages/eas-shared
+      - name: 🏗️ TSC "eas-shared" package files
+        run: yarn tsc --noEmit
+        working-directory: packages/eas-shared
+      - name: 📦️ Build "eas-shared" package
+        run: yarn build
+        working-directory: packages/eas-shared
+
+      - name: 🚨 Lint "react-native-electron-modules" package files
+        run: yarn lint --max-warnings 0
+        working-directory: packages/react-native-electron-modules
+      - name: 🏗️ TSC "react-native-electron-modules" package files
+        run: yarn tsc --noEmit
+        working-directory: packages/react-native-electron-modules
+      - name: 📦️ Build "react-native-electron-modules" package
+        run: yarn build
+        working-directory: packages/react-native-electron-modules
+
+      - name: 🚨 Lint "Orbit" app files
+        run: yarn lint --max-warnings 0
+        working-directory: apps/menu-bar
+      - name: 🏗️ TSC "Orbit" app files
+        run: yarn tsc --noEmit
+        working-directory: apps/menu-bar
+
+      - name: 🏗️ TSC "Orbit" electron files
+        run: yarn tsc --noEmit
+        working-directory: apps/menu-bar/electron
+
+      - name: 🧶 Install E2E node modules
+        run: yarn install
+        working-directory: apps/menu-bar/e2e
+      - name: 🏗️ TSC "Orbit" e2e files
+        run: yarn tsc --noEmit
+        working-directory: apps/menu-bar/e2e
+
+      - name: 🏗️ TSC "CLI" app files
+        run: yarn tsc --noEmit
+        working-directory: apps/cli
+
+      - name: Check CHANGELOG entry
+        uses: dangoslen/changelog-enforcer@v3
+        with:
+          skipLabels: 'skip-changelog-check'
+          missingUpdateErrorMessage: 'Your changes should be noted in the changelog. Read [Updating Changelogs](https://github.com/expo/expo/blob/main/guides/contributing/Updating%20Changelogs.md) guide and consider adding an appropriate entry.'

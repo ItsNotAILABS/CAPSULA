@@ -1,0 +1,55 @@
+{
+  "name": "eas-shared",
+  "version": "1.0.0",
+  "main": "build/cjs/index.js",
+  "module": "build/mjs/index.js",
+  "scripts": {
+    "build": "tsc --project tsconfig.json & tsc --project tsconfig.cjs.json",
+    "watch": "yarn build --watch --preserveWatchOutput",
+    "lint": "eslint .",
+    "typecheck": "tsc",
+    "test": "jest"
+  },
+  "exports": {
+    ".": {
+      "import": "./build/esm/index.js",
+      "require": "./build/cjs/index.js",
+      "default": "./build/esm/index.js"
+    }
+  },
+  "devDependencies": {
+    "@types/debug": "^4.1.7",
+    "@types/fs-extra": "^11.0.1",
+    "@types/getenv": "^1.0.0",
+    "@types/lodash": "^4.17.4",
+    "@types/node-fetch": "^2.6.4",
+    "@types/semver": "^7.7.0",
+    "@types/tar": "^6.1.5",
+    "@types/uuid": "^9.0.1",
+    "eslint-config-universe": "^15.0.3",
+    "expo-manifests": "^0.13.1",
+    "typescript": "~6.0.3"
+  },
+  "dependencies": {
+    "@expo/config": "^8.1.2",
+    "@expo/multipart-body-parser": "^1.1.0",
+    "@expo/osascript": "2.0.33",
+    "@expo/spawn-async": "^1.7.2",
+    "axios": "0.27.2",
+    "bplist-parser": "^0.3.0",
+    "common-types": "1.0.0",
+    "debug": "^4.3.4",
+    "env-paths": "2.2.0",
+    "exec-async": "2.2.0",
+    "extract-zip": "^2.0.1",
+    "getenv": "^1.0.0",
+    "lodash": "^4.17.21",
+    "node-fetch": "2.6.7",
+    "querystring": "0.2.0",
+    "semver": "7.5.2",
+    "system-ca": "^2.0.1",
+    "tar": "6.1.13",
+    "tempy": "^0.7.1",
+    "uuid": "9.0.0"
+  }
+}

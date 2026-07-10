@@ -1,0 +1,15 @@
+{
+  "name": "common-types",
+  "version": "1.0.0",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "yarn build --watch --preserveWatchOutput",
+    "lint": "eslint .",
+    "typecheck": "tsc"
+  },
+  "devDependencies": {
+    "eslint-config-universe": "^15.0.3",
+    "typescript": "~6.0.3"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "possibleTypes": {
+    "AccountUsageMetadata": [
+      "AccountUsageEASBuildMetadata"
+    ],
+    "ActivityTimelineProjectActivity": [
+      "Build",
+      "Submission",
+      "Update",
+      "WorkerDeployment",
+      "WorkflowRun"
+    ],
+    "Actor": [
+      "PartnerActor",
+      "Robot",
+      "SSOUser",
+      "User"
+    ],
+    "BuildOrBuildJob": [
+      "Build"
+    ],
+    "FcmSnippet": [
+      "FcmSnippetLegacy",
+      "FcmSnippetV1"
+    ],
+    "NotificationMetadata": [
+      "BuildLimitThresholdExceededMetadata",
+      "BuildPlanCreditThresholdExceededMetadata",
+      "TestNotificationMetadata"
+    ],
+    "NotificationPreference": [
+      "AccountNotificationPreference",
+      "AppNotificationPreference"
+    ],
+    "NotificationPreferenceItem": [
+      "AccountNotificationPreference",
+      "AppNotificationPreference"
+    ],
+    "PlanEnablement": [
+      "Concurrencies",
+      "EASTotalPlanEnablement"
+    ],
+    "Project": [
+      "App",
+      "Snack"
+    ],
+    "UserActor": [
+      "SSOUser",
+      "User"
+    ]
+  }
+}
