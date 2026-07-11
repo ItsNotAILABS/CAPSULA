@@ -1,0 +1,11 @@
+name = "capsula-studio"
+compatibility_date = "2026-07-11"
+pages_build_output_dir = "web/dist"
+
+[vars]
+CAPSULA_SURFACE = "web-studio"
+CAPSULA_DEPLOY_TARGET = "cloudflare-pages"
+
+# Cloudflare Pages deploy command:
+# cd web && npm ci && npm run verify && npm run build
+# npx wrangler pages deploy web/dist --project-name capsula-studio
