@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CAPSULA Manifest",
+  "type": "object",
+  "required": ["id", "name", "version", "runtime", "entrypoint", "targets", "deploy"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "version": { "type": "string" },
+    "runtime": { "type": "object" },
+    "entrypoint": { "type": "string" },
+    "files": { "type": "array", "items": { "type": "string" } },
+    "targets": { "type": "array", "items": { "type": "string" } },
+    "deploy": { "type": "object" },
+    "preview": { "type": "object" },
+    "workers": { "type": "array" },
+    "build": { "type": "object" }
+  }
+}
