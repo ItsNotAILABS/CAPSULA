@@ -1,13 +1,13 @@
 # CAPSULA Studio
 
-CAPSULA Studio is a capsule-first coding, preview, agent, mobile, and deployment platform. It turns code sessions into runnable capsules with manifests, release gates, deployment targets, Expo Go previews, GitHub workflows, and real-work proof packets.
+CAPSULA Studio is a capsule-first coding, preview, agent, mobile, and deployment platform. It turns code sessions into runnable capsules with manifests, release gates, deployment targets, Expo Go previews, GitHub workflows, demo apps, structure-building protocols, and real-work proof packets.
 
 ## What This Build Is
 
 CAPSULA runs in parallel with `ItsNotAILABS/specforge-launch-studio`:
 
 - `specforge-launch-studio` is the broader builder/spec/launcher platform.
-- `CAPSULA` is the dedicated runtime, worker, mobile preview, AI/MCP, and deployment capsule platform.
+- `CAPSULA` is the dedicated runtime, worker, mobile preview, AI/MCP, integration, demo-app, and deployment capsule platform.
 
 ## Core Platform
 
@@ -16,6 +16,7 @@ CAPSULA runs in parallel with `ItsNotAILABS/specforge-launch-studio`:
 - MCP-style JSON-RPC inner server
 - AI provider bridge with local fallback and OpenAI-compatible mode
 - browser studio UI
+- static HTML demo app gallery for prelaunch rendering
 - Web Worker capsule scaffold
 - Expo Go mobile capsule generator
 - C/C++ WASM/WASI build planner
@@ -24,8 +25,9 @@ CAPSULA runs in parallel with `ItsNotAILABS/specforge-launch-studio`:
 - deploy-plan engine
 - GitHub CI verification
 - GitHub Pages production deploy workflow
-- Docker, Compose, Vercel, Netlify, Render, and Fly.io deployment configuration
+- Docker, Compose, Vercel, Netlify, Render, Fly.io, and Cloudflare deployment configuration
 - professional math/science/data/AI optional stack
+- integration fabric for the apps users already use
 - real-work examples and live-demo proof packet
 
 ## Production Posture
@@ -73,6 +75,32 @@ npm run dev
 ```
 
 Open `http://127.0.0.1:5173`.
+
+## Standalone Demo App Preview
+
+Use this when the backend is hard to see or when a user needs a visible proof before live launch.
+
+```text
+examples/demo-apps/capsula_studio.html
+```
+
+Open it directly as a local file, or serve it:
+
+```bash
+python -m http.server 8080 -d examples/demo-apps
+```
+
+Then open:
+
+```text
+http://127.0.0.1:8080/capsula_studio.html
+```
+
+Verify demo artifacts:
+
+```bash
+bash scripts/verify-demo-apps.sh
+```
 
 ## Local Production Stack
 
@@ -138,6 +166,21 @@ Scan the QR code with Expo Go.
 
 Toolchain-sensitive lanes do not fake compile success. WASM planning detects real Emscripten or clang/WASI tooling.
 
+## Structure-Building Protocols
+
+CAPSULA structures should follow this ladder:
+
+```text
+idea -> structure template -> standalone demo -> local preview -> proof packet -> live deploy
+```
+
+Key docs:
+
+- `docs/STRUCTURE_BUILDING_PROTOCOLS.md`
+- `docs/DEMO_APP_LAUNCH_FLOW.md`
+- `docs/USE_CASE_TEMPLATE_MATRIX.md`
+- `examples/demo-apps/README.md`
+
 ## Full Platform Stack
 
 Core remains stdlib-first. Install the heavy stack when the user session needs math, science, data, notebooks, AI, APIs, storage, or professional analysis.
@@ -175,6 +218,7 @@ Mobile/showcase:
 ```bash
 python -m pip install -r requirements-dev.txt
 python -m pytest tests
+bash scripts/verify-demo-apps.sh
 cd web && npm install && npm run verify && npm run build
 ```
 
@@ -183,6 +227,7 @@ cd web && npm install && npm run verify && npm run build
 - `examples/real-work/customer-portal/README.md`
 - `examples/real-work/science-data-report/report.py`
 - `examples/real-work/science-data-report/README.md`
+- `examples/demo-apps/capsula_studio.html`
 
 ## Docs
 
@@ -192,6 +237,9 @@ cd web && npm install && npm run verify && npm run build
 - `docs/CAPSULA_SHOWCASE.md`
 - `docs/AI_APP_HANDOFF.md`
 - `docs/PROTOCOL_ATLAS.md`
+- `docs/STRUCTURE_BUILDING_PROTOCOLS.md`
+- `docs/DEMO_APP_LAUNCH_FLOW.md`
+- `docs/USE_CASE_TEMPLATE_MATRIX.md`
 - `capsules/schema/capsula.schema.json`
 - `workers/capsula.worker.ts`
 
@@ -203,4 +251,4 @@ CAPSULA supports direct-to-main work when explicitly requested, plus the intende
 create branch -> generate capsule -> push -> open PR -> compare -> merge -> deploy artifact
 ```
 
-CAPSULA is the runtime capsule studio: code becomes sessions, sessions become manifests, manifests become workers/apps/mobile previews/WASM plans, deploy plans go back to GitHub, and production surfaces can be shipped to public URLs once the target host/account is connected.
+CAPSULA is the runtime capsule studio: code becomes sessions, sessions become manifests, manifests become workers/apps/mobile previews/WASM plans, deploy plans go back to GitHub, demo apps make backend work visible, and production surfaces can be shipped to public URLs once the target host/account is connected.
