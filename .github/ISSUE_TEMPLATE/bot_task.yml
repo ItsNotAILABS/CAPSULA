@@ -1,0 +1,61 @@
+name: Bot task
+description: Route work to a CAPSULA bot owner.
+title: "bot: "
+labels: ["bot:triage", "type:task"]
+body:
+  - type: dropdown
+    id: owner_bot
+    attributes:
+      label: Owner bot
+      options:
+        - Repo Sentinel
+        - Issue Triage Bot
+        - PR Reviewer Bot
+        - Release Captain Bot
+        - Commercial QA Gatekeeper
+        - Security Steward Bot
+        - Runtime Smith Bot
+        - WASM Cartographer Bot
+        - MCP Conductor Bot
+        - GitHub Publisher Bot
+        - Docs Architect Bot
+        - Research Fellow Bot
+        - Evaluation Bench Bot
+        - User Activation Bot
+        - Customer Success Bot
+        - Growth Operator Bot
+        - Design Steward Bot
+        - Frontend Builder Bot
+        - Funding Data Room Curator
+    validations:
+      required: true
+  - type: dropdown
+    id: protocol
+    attributes:
+      label: Protocol family
+      options:
+        - Governance
+        - GitHub
+        - Runtime
+        - Security
+        - Release
+        - Product
+        - Growth
+        - Research
+        - Support
+    validations:
+      required: true
+  - type: textarea
+    id: task
+    attributes:
+      label: Task
+      placeholder: What should the bot do?
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      placeholder: What proves this task is done?
+    validations:
+      required: true
