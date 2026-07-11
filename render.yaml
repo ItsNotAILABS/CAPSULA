@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: capsula-api
+    runtime: docker
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: CAPSULA_AI_PROVIDER
+        value: local
+      - key: CAPSULA_HOST
+        value: 0.0.0.0
+      - key: CAPSULA_PORT
+        value: "8784"
