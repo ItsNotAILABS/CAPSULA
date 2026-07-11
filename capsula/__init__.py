@@ -3,6 +3,7 @@
 from .commercial import ActivationChecklist, PricingPlan, list_plans, recommend_plan
 from .deployments import DeploymentTarget, get_deployment_target, list_deployment_targets
 from .ide import IDEPanel, IDEWorkspace, create_default_workspace, default_ide_panels
+from .integrations import IntegrationConnector, IntegrationDirection, get_connector, list_connectors, shipping_integration_sequence
 from .libraries import LibraryProfile, get_library_profile, list_library_profiles
 from .models import CapsuleManifest, CapsuleSession, RuntimeSpec
 from .orchestrator import CapsulaOrchestrator
@@ -27,6 +28,11 @@ __all__ = [
     "IDEWorkspace",
     "create_default_workspace",
     "default_ide_panels",
+    "IntegrationConnector",
+    "IntegrationDirection",
+    "get_connector",
+    "list_connectors",
+    "shipping_integration_sequence",
     "LibraryProfile",
     "get_library_profile",
     "list_library_profiles",
