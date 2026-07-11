@@ -10,12 +10,20 @@
     "verify": "tsc --noEmit"
   },
   "dependencies": {
+    "@tanstack/react-query": "latest",
     "@vitejs/plugin-react": "latest",
-    "vite": "latest",
-    "typescript": "latest",
+    "clsx": "latest",
+    "date-fns": "latest",
+    "framer-motion": "latest",
+    "lucide-react": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "lucide-react": "latest"
+    "react-router-dom": "latest",
+    "recharts": "latest",
+    "typescript": "latest",
+    "vite": "latest",
+    "zod": "latest",
+    "zustand": "latest"
   },
   "devDependencies": {
     "@types/react": "latest",
