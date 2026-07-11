@@ -1,0 +1,28 @@
+app = "capsula-api"
+primary_region = "dfw"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  CAPSULA_AI_PROVIDER = "local"
+  CAPSULA_HOST = "0.0.0.0"
+  CAPSULA_PORT = "8784"
+
+[[services]]
+  internal_port = 8784
+  protocol = "tcp"
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+
+  [[services.http_checks]]
+    interval = "30s"
+    timeout = "5s"
+    method = "get"
+    path = "/health"
