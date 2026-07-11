@@ -1,0 +1,39 @@
+name: Capsule feature
+
+description: Request a runtime, web worker, Expo, MCP, WASM, or deploy feature.
+
+title: "feature: "
+
+labels: ["bot:triage", "type:feature"]
+
+body:
+  - type: dropdown
+    id: lane
+    attributes:
+      label: Capsule lane
+      options:
+        - Web Studio
+        - Python
+        - React
+        - Node
+        - C/C++ WASM
+        - Java
+        - Expo Go
+        - MCP AI
+        - GitHub deploy
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: User outcome
+      placeholder: What should the user be able to do when this ships?
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      placeholder: List concrete checks the issue bot can verify.
+    validations:
+      required: true
