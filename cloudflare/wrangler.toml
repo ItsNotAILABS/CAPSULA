@@ -1,0 +1,13 @@
+name = "capsula-studio"
+compatibility_date = "2026-07-11"
+pages_build_output_dir = "../web/dist"
+
+[vars]
+CAPSULA_DEPLOY_SURFACE = "cloudflare-pages"
+CAPSULA_API_MODE = "static-showcase"
+
+# Connect in Cloudflare Pages:
+# - Build command: cd web && npm ci && npm run build
+# - Build output directory: web/dist
+# - Root directory: /
+# - Required secrets only when backend/API calls are enabled.
