@@ -1,6 +1,8 @@
 """CAPSULA Studio runtime package."""
 
 from .commercial import ActivationChecklist, PricingPlan, list_plans, recommend_plan
+from .deployments import DeploymentTarget, get_deployment_target, list_deployment_targets
+from .libraries import LibraryProfile, get_library_profile, list_library_profiles
 from .models import CapsuleManifest, CapsuleSession, RuntimeSpec
 from .orchestrator import CapsulaOrchestrator
 from .release_gate import ReleaseGate, default_release_gate
@@ -17,6 +19,12 @@ __all__ = [
     "PricingPlan",
     "list_plans",
     "recommend_plan",
+    "DeploymentTarget",
+    "get_deployment_target",
+    "list_deployment_targets",
+    "LibraryProfile",
+    "get_library_profile",
+    "list_library_profiles",
     "ReleaseGate",
     "default_release_gate",
     "CapsuleTemplate",
