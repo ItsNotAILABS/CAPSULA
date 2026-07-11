@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react';
+import type { ReactNode } from 'react';
 import {
   Activity,
   ArrowRight,
+  BarChart3,
   Bot,
   BrainCircuit,
   CheckCircle2,
@@ -19,12 +21,12 @@ import {
   Smartphone,
   Sparkles,
   TerminalSquare,
-  Workflow,
-  Zap
+  Users,
+  Workflow
 } from 'lucide-react';
 
 type RuntimeStatus = 'ready' | 'toolchain' | 'planned';
-type View = 'overview' | 'builder' | 'runtimes' | 'workers' | 'mobile' | 'deploy';
+type View = 'overview' | 'builder' | 'runtimes' | 'workers' | 'mobile' | 'deploy' | 'funding' | 'growth';
 
 type Runtime = {
   key: string;
@@ -62,7 +64,9 @@ const nav: Array<{ id: View; label: string; icon: typeof Layers3 }> = [
   { id: 'runtimes', label: 'Runtimes', icon: Cpu },
   { id: 'workers', label: 'Bots + Workers', icon: Bot },
   { id: 'mobile', label: 'Expo Go', icon: Smartphone },
-  { id: 'deploy', label: 'Deploy', icon: Rocket }
+  { id: 'deploy', label: 'Deploy', icon: Rocket },
+  { id: 'funding', label: 'Funding Room', icon: BarChart3 },
+  { id: 'growth', label: 'Users', icon: Users }
 ];
 
 const issueBots = [
@@ -72,7 +76,10 @@ const issueBots = [
   ['Research Bot', 'Creates architecture notes, risks, and capsule manifest reviews.']
 ];
 
-const pipeline = ['Prompt', 'Session', 'Code', 'Run', 'Preview', 'Manifest', 'Capsule', 'Deploy'];
+const pipeline = ['Prompt', 'Session', 'Code', 'Run', 'Preview', 'Manifest', 'Gate', 'Deploy'];
+const templates = ['Customer Portal', 'Ops Agent', 'MCP Toolkit', 'Expo Mobile Preview', 'C++ WASM Kernel', 'Data Report'];
+const fundingDocs = ['Investor Brief', 'Runtime Thesis', 'Commercial Research Memo', 'Funding Data Room', 'Founder Demo Script', 'Commercial Readiness'];
+const growthFunnel = ['Workspace created', 'First capsule', 'Preview opened', 'Manifest generated', 'Deploy plan reviewed', 'Shared with user'];
 
 function statusScore(status: RuntimeStatus) {
   if (status === 'ready') return 96;
@@ -113,9 +120,9 @@ export function App() {
       <section className="workbench">
         <header className="hero">
           <div>
-            <p>CAPSULA STUDIO · COMMERCIAL GRADE BUILD</p>
-            <h1>Build apps, agents, web workers, mobile previews, and WASM capsules from one studio.</h1>
-            <span>CAPSULA turns coding sessions into previewable, testable, GitHub-ready capsule deployments across Python, React, Node, C/C++, Java, Expo Go, and scientific runtimes.</span>
+            <p>CAPSULA STUDIO · FUNDING AND USER READY BUILD</p>
+            <h1>Build apps, agents, web workers, mobile previews, and WASM capsules from one commercial studio.</h1>
+            <span>CAPSULA preserves the whole operating envelope: source, runtime, preview, manifest, release gate, issue bots, user docs, and deploy evidence.</span>
           </div>
           <div className="hero-actions">
             <button><Server size={16} /> API 8784</button>
@@ -128,7 +135,7 @@ export function App() {
           <article><span>Active lane</span><strong>{active.label}</strong><small>{active.preview} preview</small></article>
           <article><span>Readiness</span><strong>{score}%</strong><small>{active.status}</small></article>
           <article><span>Deploy targets</span><strong>{active.targets.length}</strong><small>{targetText}</small></article>
-          <article><span>Commercial flow</span><strong>8 stages</strong><small>prompt to deploy</small></article>
+          <article><span>Activation loop</span><strong>6 steps</strong><small>workspace to user share</small></article>
         </section>
 
         {view === 'overview' && (
@@ -162,8 +169,8 @@ export function App() {
             <section className="panel wide-panel">
               <PanelTitle eyebrow="build studio" title="Create production-grade capsules" action={<FileCode2 size={18} />} />
               <div className="builder-cards">
-                {['Full web app', 'Python agent', 'MCP tool server', 'Expo Go app', 'C++ WASM worker', 'GitHub deploy package'].map((item) => (
-                  <article key={item}><CheckCircle2 size={18} /><strong>{item}</strong><small>Generate source, manifest, preview route, and deploy notes.</small></article>
+                {templates.map((item) => (
+                  <article key={item}><CheckCircle2 size={18} /><strong>{item}</strong><small>Generate source, manifest, preview route, success criteria, and deploy notes.</small></article>
                 ))}
               </div>
             </section>
@@ -220,11 +227,34 @@ export function App() {
             </section>
           </section>
         )}
+
+        {view === 'funding' && (
+          <section className="builder-layout">
+            <section className="panel wide-panel">
+              <PanelTitle eyebrow="data room" title="Funding-ready evidence pack" action={<BarChart3 size={18} />} />
+              <div className="builder-cards">
+                {fundingDocs.map((item) => <article key={item}><ShieldCheck size={18} /><strong>{item}</strong><small>Investor-facing proof that CAPSULA is a platform, not a loose prototype.</small></article>)}
+              </div>
+            </section>
+          </section>
+        )}
+
+        {view === 'growth' && (
+          <section className="builder-layout">
+            <section className="panel wide-panel">
+              <PanelTitle eyebrow="user activation" title="Track the first usable app moment" action={<Users size={18} />} />
+              <div className="pipeline">
+                {growthFunnel.map((item, index) => <article key={item}><span>{index + 1}</span><strong>{item}</strong></article>)}
+              </div>
+              <div className="terminal"><code>Activation = workspace + capsule + preview + manifest + deploy plan + user share</code><code>North Star: time to first running capsule</code></div>
+            </section>
+          </section>
+        )}
       </section>
     </main>
   );
 }
 
-function PanelTitle({ eyebrow, title, action }: { eyebrow: string; title: string; action?: React.ReactNode }) {
+function PanelTitle({ eyebrow, title, action }: { eyebrow: string; title: string; action?: ReactNode }) {
   return <div className="heading"><div><span>{eyebrow}</span><h2>{title}</h2></div>{action}</div>;
 }
