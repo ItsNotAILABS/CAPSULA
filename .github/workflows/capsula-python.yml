@@ -1,0 +1,22 @@
+name: Verify CAPSULA Python Runtime
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  python-runtime:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-dev.txt
+      - run: python -m pytest tests
+      - run: python -m capsula.cli runtimes
+      - run: python -m capsula.cli create python --name ci-python
+      - run: printf '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}\n' | python -m capsula.mcp.server
+      - run: python -m capsula.cli expo --name "CI CAPSULA" --slug ci-capsula --out .capsula/expo/ci-capsula
