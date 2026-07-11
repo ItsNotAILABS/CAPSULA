@@ -1,0 +1,29 @@
+services:
+  capsula-api:
+    build: .
+    ports:
+      - "8784:8784"
+    environment:
+      CAPSULA_AI_PROVIDER: local
+    volumes:
+      - capsula_data:/app/.capsula
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8784/health', timeout=3).read()"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  capsula-web:
+    image: node:22-alpine
+    working_dir: /app/web
+    command: sh -c "npm install && npm run build && npm run preview -- --host 0.0.0.0 --port 5173"
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+    depends_on:
+      capsula-api:
+        condition: service_healthy
+
+volumes:
+  capsula_data:
