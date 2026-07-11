@@ -1,6 +1,7 @@
 """CAPSULA Studio runtime package."""
 
 from .commercial import ActivationChecklist, PricingPlan, list_plans, recommend_plan
+from .demo_apps import DemoAppTemplate, get_demo_app, list_demo_apps, structure_launch_sequence
 from .deployments import DeploymentTarget, get_deployment_target, list_deployment_targets
 from .ide import IDEPanel, IDEWorkspace, create_default_workspace, default_ide_panels
 from .integrations import IntegrationConnector, IntegrationDirection, get_connector, list_connectors, shipping_integration_sequence
@@ -21,6 +22,10 @@ __all__ = [
     "PricingPlan",
     "list_plans",
     "recommend_plan",
+    "DemoAppTemplate",
+    "get_demo_app",
+    "list_demo_apps",
+    "structure_launch_sequence",
     "DeploymentTarget",
     "get_deployment_target",
     "list_deployment_targets",
