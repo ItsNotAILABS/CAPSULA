@@ -1,30 +1,46 @@
-name: "\U0001F41B Bug Report"
-description: "Report a reproducible bug in Expo Orbit"
-labels: ["needs review"]
+name: Bug report
+
+description: Report a defect in CAPSULA Studio.
+
+title: "bug: "
+
+labels: ["bot:triage", "type:bug"]
+
 body:
   - type: markdown
     attributes:
-      value: Thanks for taking the time to file a bug report! If you are convinced that you have found a bug in Orbit, this is the right place. Please fill out this entire form. The most important piece is the Steps to reproduce.
-  - type: markdown
+      value: |
+        Thanks for reporting a CAPSULA issue. The issue bot will classify runtime lane, priority, and next owner.
+  - type: dropdown
+    id: surface
     attributes:
-      value: If you have a question about how to use Orbit, you can get help from the community on the [forums](https://forums.expo.dev/) or on [Discord](https://chat.expo.dev).
-  - type: textarea
-    attributes:
-      label: Summary
-      description: |
-        Clearly describe what the expected behavior is and what instead is actually happening. Be concise and precise in your description. Include any affected platforms (iOS, Android).
+      label: Surface
+      options:
+        - Web Studio
+        - Python runtime
+        - MCP AI server
+        - Expo Go generator
+        - WASM planner
+        - GitHub deploy
+        - CI / build
     validations:
       required: true
   - type: textarea
+    id: actual
     attributes:
-      label: Steps to reproduce
-      description: |
-        Explain in a few steps how to reproduce the issue reported.
+      label: What happened?
+      placeholder: Describe the broken behavior.
     validations:
       required: true
   - type: textarea
+    id: expected
     attributes:
-      label: Environment
-      description: Run the `npx expo-env-info` command and paste its output in the field below.
+      label: Expected behavior
+      placeholder: What should have happened?
     validations:
       required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or screenshots
+      render: shell
