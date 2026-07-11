@@ -8,7 +8,6 @@ import {
   Code2,
   Cpu,
   FileCode2,
-  Github,
   Globe2,
   KeyRound,
   Layers3,
@@ -105,7 +104,7 @@ const nav: Array<{ id: View; label: string; icon: typeof Layers3 }> = [
   { id: 'deploy', label: 'Deploy', icon: Rocket }
 ];
 
-const workflows = ['Issue → Bot owner → Work packet', 'Prompt → Capsule session → Starter files', 'Code → Run → Preview', 'Preview → Manifest → Release gate', 'Release gate → GitHub publish', 'Feedback → Docs/Product fix'];
+const workflows = ['Issue -> Bot owner -> Work packet', 'Prompt -> Capsule session -> Starter files', 'Code -> Run -> Preview', 'Preview -> Manifest -> Release gate', 'Release gate -> GitHub publish', 'Feedback -> Docs/Product fix'];
 const pipeline = ['Prompt', 'Session', 'Code', 'Run', 'Preview', 'Manifest', 'Gate', 'Deploy'];
 const fundingAssets = ['Whitepaper', 'Technical paper', 'Runtime thesis', 'Commercial research memo', 'Funding data room', 'Founder demo script', 'Security model', 'Release plan'];
 const userLadder = ['Visitor', 'Workspace', 'First capsule', 'Preview opened', 'Manifest generated', 'Deploy plan reviewed', 'Team invited', 'Paid workspace'];
