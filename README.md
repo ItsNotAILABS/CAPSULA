@@ -1,69 +1,57 @@
 # CAPSULA Studio
 
-CAPSULA Studio is a capsule-first coding, preview, agent, mobile, integration, frontend, and deployment platform. It turns code sessions into runnable capsules with manifests, release gates, deployment targets, Expo Go previews, GitHub workflows, demo apps, structure-building protocols, UI/UX surfaces, and real-work proof packets.
+**Isolated runtime, build, preview and deployment-plan platform for the POCKET/NEXUS ecosystem.**
 
-## What This Build Is
+CAPSULA turns a project task into a bounded execution capsule with explicit scope, budgets, artifacts and handoffs. It is the right lane for work that should be separated from a primary agent workspace: code generation, preview environments, WASM planning, mobile capsules, build verification and deployment preparation.
 
-CAPSULA runs in parallel with `ItsNotAILABS/specforge-launch-studio`:
+```text
+NEXUS task
+  │
+  ▼
+CAPSULA policy + project scope
+  │
+  ├── create session
+  ├── bounded file work
+  ├── run / verify
+  ├── preview
+  ├── WASM / mobile plan
+  ├── artifact hash
+  └── deploy plan
+  │
+  ▼
+artifact + execution receipt + handoff
+```
 
-- `specforge-launch-studio` is the broader builder/spec/launcher platform.
-- `CAPSULA` is the dedicated runtime, worker, mobile preview, AI/MCP, integration, demo-app, frontend ecosystem, and deployment capsule platform.
-
-## Core Platform
-
-- Python API server
-- Python preview server
-- MCP-style JSON-RPC inner server
-- AI provider bridge with local fallback and OpenAI-compatible mode
-- browser studio UI
-- frontend ecosystem registry for IDE, demo, connector, protocol, deploy, activation, and marketplace surfaces
-- static HTML demo app gallery for prelaunch rendering
-- Web Worker capsule scaffold
-- Expo Go mobile capsule generator
-- C/C++ WASM/WASI build planner
-- runtime/session orchestrator
-- manifest generator
-- deploy-plan engine
-- GitHub CI verification
-- GitHub Pages production deploy workflow
-- Docker, Compose, Vercel, Netlify, Render, Fly.io, and Cloudflare deployment configuration
-- professional math/science/data/AI optional stack
-- integration fabric for the apps users already use
-- real-work examples and live-demo proof packet
-
-## Production Posture
-
-CAPSULA should be judged by evidence, not adjectives. A capability is considered mature only when it has:
-
-- a runnable command
-- source files in the repository
-- a verification command or release gate
-- a deployment target
-- documentation for the user/operator
-- an explicit limitation when outside credentials are required
-
-See:
-
-- `docs/PRODUCTION_MATURITY.md`
-- `docs/REAL_WORK_PORTFOLIO.md`
-- `docs/DEPLOYMENT_MATRIX.md`
-- `docs/CAPSULA_SHOWCASE.md`
-
-## Quick Start
+## Quick start
 
 ```bash
-python -m capsula.cli api
-python -m capsula.cli preview
+python -m pip install -r requirements-dev.txt
+python -m pytest tests
+```
+
+Core CLI:
+
+```bash
 python -m capsula.cli runtimes
 python -m capsula.cli create python --name demo-python
 python -m capsula.cli run demo-python
 python -m capsula.cli manifest demo-python
 python -m capsula.cli deploy-plan demo-python
+python -m capsula.cli api
+python -m capsula.cli preview
 ```
 
-API server: `http://127.0.0.1:8784`
+API:
 
-Preview server: `http://127.0.0.1:8785`
+```text
+http://127.0.0.1:8784
+```
+
+Preview:
+
+```text
+http://127.0.0.1:8785
+```
 
 ## Web Studio
 
@@ -75,106 +63,96 @@ npm run build
 npm run dev
 ```
 
-Open `http://127.0.0.1:5173`.
+The Studio includes workspace, demo, connector, protocol, deployment, activation and template surfaces.
 
-## Frontend Ecosystem
+## NEXUS federation
 
-CAPSULA now treats the UI as a full product system, not a thin dashboard.
+CAPSULA is the **execution-capsule plane**. [`capsula/ecosystem.py`](capsula/ecosystem.py) provides a bounded adapter for NEXUS tasks.
 
-Primary surfaces:
+The federation layer supports:
 
-- Workspace IDE
-- Demo App Gallery
-- Connector Gallery
-- Protocol Console
-- Deployment Command Center
-- User Activation Board
-- Template Marketplace
-- Support/Feedback Loop
+- explicit action/risk catalog;
+- project-scoped `nexus.task.v1` validation;
+- required time/change-byte budgets for mutating work;
+- artifact lineage through `nexus.artifact.v1`;
+- explicit `nexus.handoff.v1` after capsule work;
+- deployment planning as a separate operation from deployment authority.
 
-Core flow:
+Declaration: [`ecosystem.surface.json`](ecosystem.surface.json).
 
-```text
-Idea -> Template -> Workspace -> Demo -> Protocol Gate -> Connector -> Deploy -> Feedback -> Upgrade
-```
-
-New frontend docs and data:
-
-- `capsula/frontend_ecosystem.py`
-- `web/src/designSystem.ts`
-- `web/src/frontendEcosystem.ts`
-- `docs/FRONTEND_ECOSYSTEM.md`
-- `docs/UI_UX_SYSTEM.md`
-- `docs/END_TO_END_STACK_PLAN.md`
-- `examples/demo-apps/capsula_ui_ecosystem.html`
-
-## Standalone Demo App Preview
-
-Use this when the backend is hard to see or when a user needs a visible proof before live launch.
-
-```text
-examples/demo-apps/capsula_studio.html
-examples/demo-apps/capsula_ui_ecosystem.html
-```
-
-Open either file directly, or serve them:
-
-```bash
-python -m http.server 8080 -d examples/demo-apps
-```
-
-Then open:
-
-```text
-http://127.0.0.1:8080/capsula_studio.html
-http://127.0.0.1:8080/capsula_ui_ecosystem.html
-```
-
-Verify demo artifacts:
-
-```bash
-bash scripts/verify-demo-apps.sh
-```
-
-## Local Production Stack
-
-```bash
-docker compose up --build
-```
-
-API health check:
-
-```bash
-curl http://127.0.0.1:8784/health
-```
-
-## MCP Inner Server
+## MCP
 
 ```bash
 python -m capsula.mcp.server
 ```
 
-AI modes:
+Primary tools:
+
+```text
+capsula.runtimes
+capsula.create_session
+capsula.write_file
+capsula.run_session
+capsula.manifest
+capsula.deploy_plan
+capsula.ai_generate
+capsula.ai_review
+capsula.wasm_plan
+capsula.expo
+```
+
+Provider modes:
 
 ```bash
 CAPSULA_AI_PROVIDER=local python -m capsula.mcp.server
-CAPSULA_AI_PROVIDER=openai OPENAI_API_KEY=... CAPSULA_AI_MODEL=gpt-4.1-mini python -m capsula.mcp.server
+CAPSULA_AI_PROVIDER=openai OPENAI_API_KEY=... python -m capsula.mcp.server
 ```
 
-Available MCP-style tools:
+## Runtime lanes
 
-- `capsula.runtimes`
-- `capsula.create_session`
-- `capsula.write_file`
-- `capsula.run_session`
-- `capsula.manifest`
-- `capsula.deploy_plan`
-- `capsula.ai_generate`
-- `capsula.ai_review`
-- `capsula.wasm_plan`
-- `capsula.expo`
+```text
+Python
+Node / React
+HTML/CSS/JS
+C / C++
+Java
+Julia
+MATLAB/Octave-style
+Expo Go
+WASM/WASI planning
+```
 
-## Expo Go Capsule
+Toolchain-sensitive lanes detect the actual compiler/runtime and return a real failure when the toolchain is missing.
+
+## Local production stack
+
+```bash
+docker compose up --build
+curl http://127.0.0.1:8784/health
+```
+
+## Build and preview flow
+
+```text
+idea / task
+ -> project scope
+ -> capsule
+ -> bounded mutation
+ -> verify
+ -> standalone preview
+ -> manifest
+ -> artifact hash
+ -> deploy plan
+ -> NEXUS handoff
+```
+
+Standalone demo previews live under `examples/demo-apps/` and can be served with:
+
+```bash
+python -m http.server 8080 -d examples/demo-apps
+```
+
+## Mobile capsule
 
 ```bash
 python -m capsula.cli expo --name "CAPSULA Mobile" --slug capsula-mobile --out .capsula/expo/capsula-mobile
@@ -183,110 +161,58 @@ npm install
 npm run start
 ```
 
-Scan the QR code with Expo Go.
-
-## Runtime Lanes
-
-- Python
-- React
-- Node
-- HTML/CSS/JS
-- C
-- C++
-- Java
-- Julia
-- MATLAB/Octave-style
-- Expo Go mobile
-
-Toolchain-sensitive lanes do not fake compile success. WASM planning detects real Emscripten or clang/WASI tooling.
-
-## Structure-Building Protocols
-
-CAPSULA structures should follow this ladder:
-
-```text
-idea -> structure template -> standalone demo -> local preview -> proof packet -> live deploy
-```
-
-Key docs:
-
-- `docs/STRUCTURE_BUILDING_PROTOCOLS.md`
-- `docs/DEMO_APP_LAUNCH_FLOW.md`
-- `docs/USE_CASE_TEMPLATE_MATRIX.md`
-- `examples/demo-apps/README.md`
-
-## Full Platform Stack
-
-Core remains stdlib-first. Install the heavy stack when the user session needs math, science, data, notebooks, AI, APIs, storage, or professional analysis.
+## Verification
 
 ```bash
-python -m pip install -r requirements-platform.txt
-```
-
-## Deploy Targets
-
-Static/web:
-
-- GitHub Pages workflow: `.github/workflows/pages.yml`
-- Vercel: `vercel.json`
-- Netlify: `netlify.toml`
-- Cloudflare Pages: build `web/dist`
-
-API/service:
-
-- Dockerfile
-- Docker Compose
-- Render blueprint: `render.yaml`
-- Fly.io config: `fly.toml`
-- Railway compatible Docker/Python service
-
-Mobile/showcase:
-
-- Expo Go QR preview
-- Expo EAS build route
-- Caffeine-style app showcase
-- Emergent-style app handoff
-
-## Verify
-
-```bash
-python -m pip install -r requirements-dev.txt
 python -m pytest tests
 bash scripts/verify-demo-apps.sh
 cd web && npm install && npm run verify && npm run build
 ```
 
-## Real Work Examples
+## Deployment targets
 
-- `examples/real-work/customer-portal/README.md`
-- `examples/real-work/science-data-report/report.py`
-- `examples/real-work/science-data-report/README.md`
-- `examples/demo-apps/capsula_studio.html`
-- `examples/demo-apps/capsula_ui_ecosystem.html`
+CAPSULA can prepare artifacts/plans for:
+
+```text
+Cloudflare
+GitHub Pages
+Vercel
+Netlify
+Render
+Fly.io
+Docker / Compose
+Expo / EAS
+```
+
+External deployments should consume a capsule manifest and artifact hashes so the deployed version can be traced back to its build.
+
+## Repository map
+
+```text
+capsula/                  runtime + ecosystem adapter
+capsules/                 capsule schemas
+tests/                    runtime/contract tests
+web/                      browser Studio
+workers/                  worker scaffolds
+examples/                 demo and real-work examples
+docs/                     production/deployment/design guides
+ecosystem.surface.json    NEXUS capability declaration
+```
 
 ## Docs
 
-- `docs/PRODUCTION_MATURITY.md`
-- `docs/REAL_WORK_PORTFOLIO.md`
-- `docs/DEPLOYMENT_MATRIX.md`
-- `docs/CAPSULA_SHOWCASE.md`
-- `docs/AI_APP_HANDOFF.md`
-- `docs/PROTOCOL_ATLAS.md`
-- `docs/STRUCTURE_BUILDING_PROTOCOLS.md`
-- `docs/DEMO_APP_LAUNCH_FLOW.md`
-- `docs/USE_CASE_TEMPLATE_MATRIX.md`
-- `docs/FRONTEND_ECOSYSTEM.md`
-- `docs/UI_UX_SYSTEM.md`
-- `docs/END_TO_END_STACK_PLAN.md`
-- `capsules/schema/capsula.schema.json`
-- `workers/capsula.worker.ts`
+- [`docs/PRODUCTION_MATURITY.md`](docs/PRODUCTION_MATURITY.md)
+- [`docs/DEPLOYMENT_MATRIX.md`](docs/DEPLOYMENT_MATRIX.md)
+- [`docs/STRUCTURE_BUILDING_PROTOCOLS.md`](docs/STRUCTURE_BUILDING_PROTOCOLS.md)
+- [`docs/FRONTEND_ECOSYSTEM.md`](docs/FRONTEND_ECOSYSTEM.md)
+- [`docs/UI_UX_SYSTEM.md`](docs/UI_UX_SYSTEM.md)
 
-## Deploy Direction
+## Ecosystem
 
-CAPSULA supports direct-to-main work when explicitly requested, plus the intended release path:
+- [NEXUS](https://github.com/ItsNotAILABS/nexus) — protocol/route authority
+- [POCKET](https://github.com/ItsNotAILABS/pocket) — identity, tenancy and policy
+- [POCKET Agent](https://github.com/ItsNotAILABS/pocket-agent) — long-running execution
+- [MatDaemon](https://github.com/ItsNotAILABS/MatDaemon) — bounded compute
+- [Sovereign Forge](https://github.com/ItsNotAILABS/sovereign-forge-os) — build/release preparation
 
-```text
-create branch -> generate capsule -> push -> open PR -> compare -> merge -> deploy artifact
-```
-
-CAPSULA is the runtime capsule studio: code becomes sessions, sessions become manifests, manifests become workers/apps/mobile previews/WASM plans, deploy plans go back to GitHub, demo apps make backend work visible, frontend surfaces make the full stack usable, and production surfaces can be shipped to public URLs once the target host/account is connected.
+CAPSULA's core value is isolation with lineage: **scope the work, execute it in a bounded lane, prove the output, and hand it back cleanly.**
