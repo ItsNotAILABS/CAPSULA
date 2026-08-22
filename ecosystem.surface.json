@@ -1,0 +1,12 @@
+{
+  "schema": "nexus.capability.v1",
+  "component": "capsula",
+  "repository": "ItsNotAILABS/CAPSULA",
+  "role": "isolated-runtime-and-deployment-capsule-plane",
+  "actions": ["capsula.session.create","capsula.file.write","capsula.session.run","capsula.manifest.build","capsula.deploy.plan","capsula.preview.prepare","capsula.wasm.plan"],
+  "produces": ["nexus.artifact.v1","nexus.execution-receipt.v1","nexus.handoff.v1"],
+  "consumes": ["nexus.task.v1","nexus.policy-decision.v1","nexus.budget.v1","nexus.context-pack.v1"],
+  "limits": {"direct_production_deploy":false,"arbitrary_host_shell":false,"secrets_in_manifest":false,"operator_approval_for_external_deploy":true},
+  "proof": {"state":"source","runtime_verification_required":true},
+  "authority": "ItsNotAILABS/nexus"
+}
