@@ -1,0 +1,1 @@
+[{"AllowedHeaders":["Range"],"AllowedMethods":["GET","HEAD"],"AllowedOrigins":["https://<pages-domain>"],"ExposeHeaders":["Content-Range","Accept-Ranges","Content-Length"],"MaxAgeSeconds":3600}]

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>capsula-canister — synthetic mechanics demo</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 760px; margin: 2rem auto; padding: 0 1rem; }
+    .banner { background: #fff3cd; border: 1px solid #e0a800; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; }
+    .banner strong { display: block; margin-bottom: .25rem; }
+    #track { background: #eee; border-radius: 6px; height: 14px; overflow: hidden; margin: 1rem 0; }
+    #bar { background: #2f7cf6; height: 100%; width: 0%; transition: width .15s; }
+    #log { background: #111; color: #cfd; padding: 1rem; border-radius: 8px; min-height: 220px; white-space: pre-wrap; }
+    button { font-size: 1rem; padding: .6rem 1.2rem; }
+  </style>
+</head>
+<body>
+  <div class="banner">
+    <strong>SYNTHETIC MECHANICS DEMO — not real inference.</strong>
+    The WASM "core" is a 176-byte hand-assembled module whose <code>infer()</code>
+    always returns 42, plus a <em>synthetic</em> deterministic session stepper
+    that echoes token+1 for 8 steps (token echo, not language modeling).
+    The "weights" are 2048 deterministic bytes with no learned content.
+    This page proves the machinery only: manifest &rarr; download
+    &rarr; sha256 verify &rarr; Cache Storage &rarr; worker instantiate &rarr; RPC
+    &rarr; reasoning session with streamed tokens.
+  </div>
+  <button id="runBtn">Run end-to-end</button>
+  <div id="track"><div id="bar"></div></div>
+  <pre id="log"></pre>
+  <script type="module" src="../dist/demo/demo-app.js"></script>
+</body>
+</html>

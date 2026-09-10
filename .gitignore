@@ -17,3 +17,8 @@ apps/menu-bar/cli/orbit-cli*
 .DS_Store
 
 coverage
+
+# build output
+dist
+packages/*/dist
+apps/*/dist

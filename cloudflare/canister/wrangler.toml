@@ -1,0 +1,26 @@
+# capsula-canister-app — Cloudflare surface for the browser WASM canister.
+#
+# SCAFFOLDING ONLY. Nothing is deployed; no Cloudflare account is connected.
+# This is a NEW file — the existing cloudflare/wrangler.toml (static Pages
+# config for the studio dashboard) is untouched.
+#
+# Serves the avatar-phone app (code arriving separately) as a Pages project,
+# with an R2 bucket holding WASM cores + weight shards for browser download.
+
+name = "capsula-canister-app"
+compatibility_date = "2026-09-10"
+
+# Set once the avatar-phone app lands and declares its build output dir, e.g.:
+# pages_build_output_dir = "apps/avatar-phone/dist"
+
+[[r2_buckets]]
+binding = "WEIGHTS"
+bucket_name = "capsula-weights"
+
+[vars]
+# Manifests are served from the Pages site itself:
+#   https://<pages-domain>/canister/<canister-id>.json
+# Shard/wasm URLs inside the manifest point at the R2 public URL
+# (custom domain or *.r2.dev), configured after bucket creation.
+CANISTER_ID = "avatar-phone"
+R2_PUBLIC_BASE = "https://r2-weights.example.invalid  # PLACEHOLDER — replace with the real public R2 base URL"
